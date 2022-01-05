@@ -1,12 +1,12 @@
-var dotenv = require("dotenv")
-dotenv.config();
-var express = require("express");
+const express = require("express");
+const app = express();
 var cors = require("cors");
-var bodyParser = require("body-parser")
-var dbConnection = require("./src/config/Db")
-dbConnection()
-const port = process.env.PORT || 4000;
-var app = express();
+var bodyParser = require("body-parser");
+const port = process.env.port || 3001;
+var dbConnection = require("./src/config/db");
+dbConnection();
+
+// MiddleWare
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -14,27 +14,22 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static('public'))
+app.use(express.static("public"));
 
+// Rendering
 
-
-
-var imageRoute = require('./src/imageProject/imageRoutes')
-var adminRoute = require('./src/imageProject/imageRoutes')
-
-app.get("/", function (req, res) {
-  res.send("Server is working");
+app.get("/", (req, res) => {
+  res.send("Server is working!");
 });
 
-app.use("/imageProject",imageRoute)
-app.use("/admin",adminRoute)
+// Routes
+var routes = require("./src/user/Routes");
+app.use("/routes", routes);
 
-
-// server port listener
-app.listen(port, (err) => {
-  if (err) {
-    console.log("something went wrong", error);
-  } else {
-    console.log(`server is working on port, ${port}`);
+app.listen(port, () => {
+  try {
+    console.log(`CRUD App listening at http://localhost:${port}`);
+  } catch (error) {
+    console.log("Error :", error);
   }
 });
