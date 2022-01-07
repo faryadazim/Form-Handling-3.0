@@ -3,7 +3,8 @@ const app = express();
 const port = process.env.port || 3000;
 var bodyParser = require("body-parser");
 var cors = require("cors");
-
+const DbConneecton = require("./src/config/Database");
+DbConneecton();
 // __________MidcdleWare
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
